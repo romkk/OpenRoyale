@@ -1,4 +1,9 @@
+package me.andreww7985.clashroyale.crypto;
+import java.util.Arrays;
+
 import com.neilalexander.jnacl.crypto.curve25519xsalsa20poly1305;
+
+import me.andreww7985.clashroyale.utils.Utils;
 
 public class ClientCrypto extends Crypto {
 	public ClientCrypto(byte[] serverKey) {
@@ -9,22 +14,23 @@ public class ClientCrypto extends Crypto {
 	}
 
 	public byte[] encryptLoginPacket(byte[] message) {
-		Nonce n = new Nonce(clientKey, serverKey);
-		byte[] toEncrypt = Utils.concatBytes(sessionKey, encryptNonce.getBytes(), message);
-		System.out.println("Unecrypted Login without header:");
-		System.out.println(Utils.bytesToHex(message));
-		return Utils.concatBytes(clientKey, encrypt(toEncrypt, n));
+		Nonce nonce = new Nonce(clientKey, serverKey);
+		return Utils.concatBytes(clientKey,
+				encrypt(Utils.concatBytes(sessionKey, encryptNonce.getBytes(), message), nonce));
 	}
 
 	public byte[] encryptPacket(byte[] message) {
 		return encrypt(message, null);
 	}
-	
+
 	public byte[] decryptLoginOkPacket(byte[] message) {
 		Nonce n = new Nonce(clientKey, encryptNonce.getBytes(), serverKey);
-		return decrypt(message, n);
+		byte[] decrypted = decrypt(message, n);
+		decryptNonce = new Nonce(Arrays.copyOfRange(decrypted, 0, 24));
+		sharedKey = Arrays.copyOfRange(decrypted, 24, 56);
+		return Arrays.copyOfRange(decrypted, 56, decrypted.length);
 	}
-	
+
 	public byte[] decryptPacket(byte[] message) {
 		return decrypt(message, null);
 	}

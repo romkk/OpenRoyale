@@ -1,16 +1,19 @@
+package me.andreww7985.clashroyale.utils;
 
 public class Utils {
-	static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	public static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+	public static final char[] tagArray = "0289PYLQGRJCUV".toCharArray();
 
 	public static String bytesToHex(byte[] b) {
-		char[] hexChars = new char[b.length * 2 + b.length];
+		String result = "";
 		for (int j = 0; j < b.length; j++) {
 			int v = b[j] & 0xFF;
-			hexChars[j * 3] = hexArray[v >>> 4];
-			hexChars[j * 3 + 1] = hexArray[v & 0x0F];
-			hexChars[j * 3 + 2] = ' ';
+			result += "0x";
+			result += hexArray[v >>> 4];
+			result += hexArray[v & 0x0F];
+			result += " ";
 		}
-		return new String(hexChars);
+		return result;
 	}
 
 	public static byte[] hexToBytes(String s) {
@@ -31,6 +34,15 @@ public class Utils {
 		for (byte[] b : bytes) {
 			System.arraycopy(b, 0, result, i, b.length);
 			i += b.length;
+		}
+		return result;
+	}
+
+	public static String idToTag(long id) {
+		String result = "";
+		while (id > 0) {
+			result += tagArray[(int) (id % 14)];
+			id /= 14;
 		}
 		return result;
 	}

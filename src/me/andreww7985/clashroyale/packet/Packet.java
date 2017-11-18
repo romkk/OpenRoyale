@@ -1,4 +1,5 @@
-import java.io.InputStream;
+package me.andreww7985.clashroyale.packet;
+import java.io.DataInputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -8,18 +9,17 @@ public abstract class Packet {
 	private int pointer = 0;
 	private ArrayList<Byte> data = new ArrayList<Byte>();
 
-	public Packet(final short id, final InputStream in) throws Exception {
+	protected Packet(final short id, final DataInputStream in) throws Exception {
 		this.id = id;
 		int length = (in.read() & 0xFF) << 16 | (in.read() & 0xFF) << 8 | (in.read() & 0xFF);
 		byte[] temp = new byte[length];
-		in.read();
-		in.read();
-		in.read(temp);
+		in.readShort();
+		in.readFully(temp);
 		for (byte b : temp)
 			data.add(b);
 	}
 
-	public Packet(final short id) {
+	protected Packet(final short id) {
 		this.id = id;
 	}
 
@@ -117,21 +117,25 @@ public abstract class Packet {
 		boolean rotate = true;
 		int lsb, msb;
 		byte b;
-		value = (value << 1) ^ (value >> 31);
-		while (value > 0) {
-			b = (byte) (value & 0x7f);
-			if (value >= 0x80)
-				b |= 0x80;
-			if (rotate) {
-				rotate = false;
-				lsb = b & 0x1;
-				msb = (b & 0x80) >> 7;
-				b >>= 1;
-				b &= ~0xC0;
-				b |= (msb << 7) | (lsb << 6);
+		if (value == 0) {
+			putByte((byte) 0);
+		} else {
+			value = (value << 1) ^ (value >> 31);
+			while (value > 0) {
+				b = (byte) (value & 0x7f);
+				if (value >= 0x80)
+					b |= 0x80;
+				if (rotate) {
+					rotate = false;
+					lsb = b & 0x1;
+					msb = (b & 0x80) >> 7;
+					b >>= 1;
+					b &= ~0xC0;
+					b |= (msb << 7) | (lsb << 6);
+				}
+				putByte(b);
+				value >>= 7;
 			}
-			putByte(b);
-			value >>= 7;
 		}
 	}
 
@@ -141,7 +145,7 @@ public abstract class Packet {
 	}
 
 	protected void putString(final String value) {
-		if (value == null || value.isEmpty()) {
+		if (value == null) {
 			putInt(0xFFFFFFFF);
 		} else {
 			byte[] bytes = value.getBytes(StandardCharsets.UTF_8);

@@ -1,3 +1,4 @@
+package me.andreww7985.clashroyale.crypto;
 import java.util.Arrays;
 
 import com.neilalexander.jnacl.crypto.curve25519xsalsa20poly1305;
@@ -63,7 +64,7 @@ public abstract class Crypto {
 	}
 
 	public byte[] decrypt(byte[] data, Nonce decryptNonce) {
-		if (decryptNonce != null) {
+		if (decryptNonce == null) {
 			this.decryptNonce.increment();
 			decryptNonce = this.decryptNonce;
 		}

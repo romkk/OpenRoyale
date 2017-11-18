@@ -1,3 +1,4 @@
+package me.andreww7985.clashroyale.packet;
 public class PacketClientHello extends Packet {
 	public PacketClientHello(int protocol, int keyVersion, int majorVersion, int minorVersion, int buildVersion,
 			String resourceHash, int deviceType, int appStore) {

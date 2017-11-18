@@ -1,3 +1,6 @@
+package me.andreww7985.clashroyale.packet;
+import me.andreww7985.clashroyale.crypto.ClientCrypto;
+import me.andreww7985.clashroyale.crypto.Crypto;
 
 public class PacketLogin extends Packet {
 
