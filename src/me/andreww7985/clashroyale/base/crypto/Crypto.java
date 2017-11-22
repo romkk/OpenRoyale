@@ -1,4 +1,4 @@
-package me.andreww7985.clashroyale.crypto;
+package me.andreww7985.clashroyale.base.crypto;
 import java.util.Arrays;
 
 import com.neilalexander.jnacl.crypto.curve25519xsalsa20poly1305;

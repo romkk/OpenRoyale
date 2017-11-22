@@ -1,8 +1,8 @@
-package me.andreww7985.clashroyale.packet;
+package me.andreww7985.clashroyale.base.packet;
 import java.io.DataInputStream;
 
-import me.andreww7985.clashroyale.crypto.ClientCrypto;
-import me.andreww7985.clashroyale.crypto.Crypto;
+import me.andreww7985.clashroyale.base.crypto.ClientCrypto;
+import me.andreww7985.clashroyale.base.crypto.Crypto;
 
 public class PacketLoginOk extends Packet {
 	public byte unknown4;
@@ -12,7 +12,7 @@ public class PacketLoginOk extends Packet {
 	public String userToken, gameCenterID, facebookID, environment, facebookAppID, serverTime, accountCreatedDate,
 			googleServiceId, unknown2, unknown3, region, contentURL, eventAssetsURL;
 
-	public PacketLoginOk(DataInputStream in, Crypto crypto) throws Exception {
+	public PacketLoginOk(DataInputStream in, Crypto crypto) {
 		super((short) 20104, in);
 		setData(((ClientCrypto) crypto).decryptLoginOkPacket(getData()));
 		userID = getLong();

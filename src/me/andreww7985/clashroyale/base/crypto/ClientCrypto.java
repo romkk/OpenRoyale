@@ -1,9 +1,9 @@
-package me.andreww7985.clashroyale.crypto;
+package me.andreww7985.clashroyale.base.crypto;
 import java.util.Arrays;
 
 import com.neilalexander.jnacl.crypto.curve25519xsalsa20poly1305;
 
-import me.andreww7985.clashroyale.utils.Utils;
+import me.andreww7985.clashroyale.base.utils.Utils;
 
 public class ClientCrypto extends Crypto {
 	public ClientCrypto(byte[] serverKey) {

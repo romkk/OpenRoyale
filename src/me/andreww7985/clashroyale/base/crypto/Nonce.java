@@ -1,4 +1,4 @@
-package me.andreww7985.clashroyale.crypto;
+package me.andreww7985.clashroyale.base.crypto;
 import java.security.SecureRandom;
 
 import ove.crypto.digest.Blake2b;

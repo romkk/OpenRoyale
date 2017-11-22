@@ -1,4 +1,5 @@
-package me.andreww7985.clashroyale.packet;
+package me.andreww7985.clashroyale.base.packet;
+
 import java.io.DataInputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -9,14 +10,19 @@ public abstract class Packet {
 	private int pointer = 0;
 	private ArrayList<Byte> data = new ArrayList<Byte>();
 
-	protected Packet(final short id, final DataInputStream in) throws Exception {
+	protected Packet(final short id, final DataInputStream in) {
 		this.id = id;
-		int length = (in.read() & 0xFF) << 16 | (in.read() & 0xFF) << 8 | (in.read() & 0xFF);
-		byte[] temp = new byte[length];
-		in.readShort();
-		in.readFully(temp);
-		for (byte b : temp)
-			data.add(b);
+		try {
+			int length = (in.read() & 0xFF) << 16 | (in.read() & 0xFF) << 8 | (in.read() & 0xFF);
+			byte[] temp = new byte[length];
+			in.readShort();
+			in.readFully(temp);
+			for (byte b : temp)
+				data.add(b);
+		} catch (Exception e) {
+			System.err.println("Failed to read packet " + id);
+			e.printStackTrace();
+		}
 	}
 
 	protected Packet(final short id) {

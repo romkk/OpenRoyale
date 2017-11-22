@@ -1,4 +1,4 @@
-package me.andreww7985.clashroyale.utils;
+package me.andreww7985.clashroyale.base.utils;
 
 public class Utils {
 	public static final char[] hexArray = "0123456789ABCDEF".toCharArray();

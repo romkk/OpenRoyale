@@ -2,15 +2,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
-import me.andreww7985.clashroyale.crypto.ClientCrypto;
-import me.andreww7985.clashroyale.crypto.Crypto;
-import me.andreww7985.clashroyale.packet.Packet;
-import me.andreww7985.clashroyale.packet.PacketClientHello;
-import me.andreww7985.clashroyale.packet.PacketLogin;
-import me.andreww7985.clashroyale.packet.PacketLoginFailed;
-import me.andreww7985.clashroyale.packet.PacketLoginOk;
-import me.andreww7985.clashroyale.packet.PacketServerHello;
-import me.andreww7985.clashroyale.utils.Utils;
+import me.andreww7985.clashroyale.base.crypto.ClientCrypto;
+import me.andreww7985.clashroyale.base.crypto.Crypto;
+import me.andreww7985.clashroyale.base.packet.Packet;
+import me.andreww7985.clashroyale.base.packet.PacketClientHello;
+import me.andreww7985.clashroyale.base.packet.PacketLogin;
+import me.andreww7985.clashroyale.base.packet.PacketLoginFailed;
+import me.andreww7985.clashroyale.base.packet.PacketLoginOk;
+import me.andreww7985.clashroyale.base.packet.PacketServerHello;
+import me.andreww7985.clashroyale.base.utils.Utils;
 
 public class Test {
 	static final String CONTENT_HASH = "a63c5aa8ef578e8208af1a09b107dbcdd7fb4bf9";
