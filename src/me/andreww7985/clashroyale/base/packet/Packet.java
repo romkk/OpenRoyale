@@ -5,12 +5,12 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public abstract class Packet {
+public class Packet {
 	private final short id;
 	private int pointer = 0;
 	private ArrayList<Byte> data = new ArrayList<Byte>();
 
-	protected Packet(final short id, final DataInputStream in) {
+	public Packet(final short id, final DataInputStream in) {
 		this.id = id;
 		try {
 			int length = (in.read() & 0xFF) << 16 | (in.read() & 0xFF) << 8 | (in.read() & 0xFF);
@@ -31,6 +31,10 @@ public abstract class Packet {
 
 	public short getID() {
 		return id;
+	}
+	
+	public int getLength() {
+		return data.size();
 	}
 
 	public byte[] getData() {

@@ -5,15 +5,14 @@ public class Utils {
 	public static final char[] tagArray = "0289PYLQGRJCUV".toCharArray();
 
 	public static String bytesToHex(byte[] b) {
-		String result = "";
+		char[] hexChars = new char[b.length * 2 + b.length];
 		for (int j = 0; j < b.length; j++) {
 			int v = b[j] & 0xFF;
-			result += "0x";
-			result += hexArray[v >>> 4];
-			result += hexArray[v & 0x0F];
-			result += " ";
+			hexChars[j * 3] = hexArray[v >>> 4];
+			hexChars[j * 3 + 1] = hexArray[v & 0x0F];
+			hexChars[j * 3 + 2] = ' ';
 		}
-		return result;
+		return new String(hexChars);
 	}
 
 	public static byte[] hexToBytes(String s) {

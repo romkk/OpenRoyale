@@ -1,6 +1,6 @@
 package me.andreww7985.clashroyale.base.crypto;
-import java.util.Arrays;
 
+import java.util.Arrays;
 import com.neilalexander.jnacl.crypto.curve25519xsalsa20poly1305;
 import com.neilalexander.jnacl.crypto.xsalsa20poly1305;
 
@@ -59,7 +59,8 @@ public abstract class Crypto {
 		byte[] paddedData = new byte[32 + data.length];
 		byte[] encryptedData = new byte[32 + data.length];
 		System.arraycopy(data, 0, paddedData, 32, data.length);
-		xsalsa20poly1305.crypto_secretbox(encryptedData, paddedData, paddedData.length, encryptNonce.getBytes(), sharedKey);
+		xsalsa20poly1305.crypto_secretbox(encryptedData, paddedData, paddedData.length, encryptNonce.getBytes(),
+				sharedKey);
 		return Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
 	}
 
