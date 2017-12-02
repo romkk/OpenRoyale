@@ -9,9 +9,10 @@ public class ServerCrypto extends Crypto {
 	public ServerCrypto(byte[] privateKey, byte[] serverKey) {
 		super(serverKey);
 		this.privateKey = privateKey;
+		setEncryptNonce(new Nonce());
 	}
 
-	public byte[] decryptLoginPacket(byte[] message, ClientCrypto c) {
+	public byte[] decryptPacketLogin(byte[] message, ClientCrypto clientCrypto) {
 		this.clientKey = Arrays.copyOf(message, 32);
 		this.sharedKey = new byte[32];
 		curve25519xsalsa20poly1305.crypto_box_beforenm(this.sharedKey, this.clientKey, this.privateKey);
@@ -19,7 +20,9 @@ public class ServerCrypto extends Crypto {
 		byte[] decrypted = decrypt(Arrays.copyOfRange(message, 32, message.length), nonce);
 		this.sessionKey = Arrays.copyOfRange(decrypted, 0, 24);
 		this.decryptNonce = new Nonce(Arrays.copyOfRange(decrypted, 24, 48));
-		c.encryptNonce = this.decryptNonce; // TODO: bug
+		if (clientCrypto != null)
+			clientCrypto.encryptNonce = new Nonce(Arrays.copyOfRange(decrypted, 24, 48));
+		state++;
 		return Arrays.copyOfRange(decrypted, 48, decrypted.length);
 	}
 
@@ -27,10 +30,11 @@ public class ServerCrypto extends Crypto {
 		return decrypt(message, null);
 	}
 
-	public byte[] encryptLoginOkPacket(byte[] message, ClientCrypto c) {
+	public byte[] encryptPacketLoginOK(byte[] message, ClientCrypto clientCrypto) {
 		Nonce nonce = new Nonce(clientKey, serverKey, decryptNonce.getBytes());
-		this.sharedKey = c.sharedKey;
-		return encrypt(Utils.concatBytes(encryptNonce.getBytes(), c.sharedKey, message), nonce);
+		sharedKey = clientCrypto.sharedKey;
+		state++;
+		return encrypt(Utils.concatBytes(encryptNonce.getBytes(), sharedKey, message), nonce);
 	}
 
 	public byte[] encryptPacket(byte[] message) {

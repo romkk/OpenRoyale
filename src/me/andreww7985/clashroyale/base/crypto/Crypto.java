@@ -5,6 +5,7 @@ import com.neilalexander.jnacl.crypto.curve25519xsalsa20poly1305;
 import com.neilalexander.jnacl.crypto.xsalsa20poly1305;
 
 public abstract class Crypto {
+	protected int state = 0;
 	protected byte[] privateKey, serverKey, clientKey, sharedKey, sessionKey;
 	protected Nonce decryptNonce, encryptNonce;
 
@@ -26,7 +27,7 @@ public abstract class Crypto {
 		return this.encryptNonce;
 	}
 
-	public void setEncryptNonce(Nonce encryptNonce) {
+	protected void setEncryptNonce(Nonce encryptNonce) {
 		this.encryptNonce = encryptNonce;
 	}
 
@@ -34,7 +35,7 @@ public abstract class Crypto {
 		return this.decryptNonce;
 	}
 
-	public void setDecryptNonce(Nonce decryptNonce) {
+	protected void setDecryptNonce(Nonce decryptNonce) {
 		this.decryptNonce = encryptNonce;
 	}
 
@@ -46,7 +47,7 @@ public abstract class Crypto {
 		return this.sessionKey;
 	}
 
-	public void beforeNm(byte[] serverKey) {
+	protected void beforeNm(byte[] serverKey) {
 		this.sharedKey = new byte[32];
 		curve25519xsalsa20poly1305.crypto_box_beforenm(sharedKey, serverKey, privateKey);
 	}
@@ -73,10 +74,12 @@ public abstract class Crypto {
 		byte[] c = new byte[16 + data.length];
 		byte[] m = new byte[c.length];
 		System.arraycopy(data, 0, c, 16, data.length);
-		if (c.length < 32)
-			return null;
 		if (xsalsa20poly1305.crypto_secretbox_open(m, c, c.length, decryptNonce.getBytes(), sharedKey) != 0)
 			return null;
 		return Arrays.copyOfRange(m, 32, m.length);
+	}
+
+	public int getState() {
+		return state;
 	}
 }

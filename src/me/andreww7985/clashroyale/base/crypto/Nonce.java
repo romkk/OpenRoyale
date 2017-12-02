@@ -35,6 +35,10 @@ public class Nonce {
 		this(null, bytes, null);
 	}
 	
+	public Nonce(Nonce nonce) {
+		this(null, nonce.getBytes(), null);
+	}
+	
 	public Nonce() {
 		this(null, null, null);
 	}

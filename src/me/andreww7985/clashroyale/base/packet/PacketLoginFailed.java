@@ -9,17 +9,17 @@ public class PacketLoginFailed extends Packet {
 	public PacketLoginFailed(int errorCode, String resourceFingerprintData, String redirectDomain, String contentURL,
 			String updateURL, String reason, int secondsUntilMaintenanceEnd) {
 		super((short) 20103);
-		putRrsInt32(errorCode);
+		putVarInt(errorCode);
 		putString(resourceFingerprintData);
 		putString(contentURL);
 		putString(updateURL);
 		putString(reason);
-		putRrsInt32(secondsUntilMaintenanceEnd);
+		putVarInt(secondsUntilMaintenanceEnd);
 	}
 
 	public PacketLoginFailed(DataInputStream in) {
 		super((short) 20103, in);
-		errorCode = getRrsInt32();
+		errorCode = getVarInt();
 		resourceFingerprintData = getString();
 		redirectDomain = getString();
 		contentURL = getString();
@@ -27,6 +27,6 @@ public class PacketLoginFailed extends Packet {
 		getByte();
 		getByte();
 		reason = getString();
-		secondsUntilMaintenanceEnd = getRrsInt32();
+		secondsUntilMaintenanceEnd = getVarInt();
 	}
 }
